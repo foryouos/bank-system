@@ -1,6 +1,10 @@
-#include "head.h"
-
-
+/*
+Project:存款类主函数文件
+environment：Visual studio 2022
+*/
+#include "account.h"
+#include <iostream>
+using namespace std;
 int main(void)
 {
 	//建立几个账户
@@ -19,5 +23,7 @@ int main(void)
 	cout << endl;
 	sa1.show();
 	cout << endl;
+
+	cout << "Total :" << SavingsAccount::getTotal() << endl;
 	return 0;
 }
