@@ -1,6 +1,11 @@
 # 银行管理系统
 #### 实现功能
-* 
+* 类SavingsAccount
+	* 成员数据:活期储备账户:账户id,余额balance，年利率rate
+	* 函数成员:显示账户信息show,存款deposit,取款withdraw，结算利息settle,
+
+
+
 
 #### 参考资料
 * C++学习过程中，练习巩固
