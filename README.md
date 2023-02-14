@@ -1,4 +1,11 @@
 # 银行管理系统
+#### 文件功能
+* date.h  日期类头文件
+* date.cpp 日期类实现文件
+* account.h  储蓄账户类定义头文件
+* account.cpp 储蓄类账户类实现文件
+* main.cpp   主函数文件
+
 #### 实现功能
 * 类SavingsAccount
 	* 成员数据:活期储备账户:账户id,余额balance，年利率rate

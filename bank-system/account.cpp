@@ -5,13 +5,16 @@ project :类实现文件
 #include <iostream>
 #include <cmath>
 using namespace std;
-//函数成员的实现
+
 double SavingsAccount::total = 0;
-SavingsAccount::SavingsAccount(int date, int id, double rate) :id(id), balance(0), rate(rate), lastDate(date), accumulation(0)
+//函数成员的实现
+SavingsAccount::SavingsAccount(const Date &date, const string &id, double rate)
+	:id(id), balance(0), rate(rate), lastDate(date), accumulation(0)
 {
-	cout << date << "\t#" << id << "is created" << endl;
+	date.show();
+	cout <<"\t#" << id << "is created" << endl;
 }
-void SavingsAccount::record(int date, double amount)
+void SavingsAccount::record(const Date& date, double amount,const string &desc)
 {
 	accumulation = accumulate(date); //获取到date日期为止的存款金额按日累积值
 	lastDate = date;
@@ -20,29 +23,35 @@ void SavingsAccount::record(int date, double amount)
 	amount = floor(amount * 100 + 0.5) / 100;  //保留小数点后两位，
 	balance += amount;
 	total += amount;
-	cout << date << "\t#" << id << "\t" << amount << "\t" << balance << endl;
+	date.show();
+	cout << "\t#" << id << "\t" << amount << "\t" << balance <<"\t"<<desc<< endl;
 }
-void SavingsAccount::deposit(int date, double amount)
+void SavingsAccount::error(const string& msg) const
 {
-	record(date, amount); //记录一笔账
+	cout << "Erroe(#" << id << "):" << msg << endl;
 }
-void SavingsAccount::withdraw(int date, double amount)
+
+void SavingsAccount::deposit(const Date& date, double amount,const string &desc)
+{
+	record(date, amount,desc); //记录一笔账
+}
+void SavingsAccount::withdraw(const Date& date, double amount,const string& desc)
 {
 	if (amount > getBalance())
 		cout << "Error: not enough money" << endl;
 	else
-		record(date, -amount);
+		record(date, -amount,desc);
 }
-void SavingsAccount::settle(int date)
+void SavingsAccount::settle(const Date& date)
 {
 	double interest = accumulate(date) * rate / 365; //计算年息
 	if (interest != 0)
 	{
-		record(date, interest);
+		record(date, interest,"interest");
 	}
 	accumulation = 0;
 }
-void SavingsAccount::show()
+void SavingsAccount::show() const
 {
 	cout << "#" << id << "\tBalance:" << balance;
 }
