@@ -5,12 +5,41 @@
 #include "date.h"
 #include "accumulator.h"
 #include <string>
+#include <istream>
+#include <map>
+//前置声明
+class Account;
+//账目记录
+class AccountRecord
+{
+private:
+	//日期
+	Date date;
+	//账户
+	const Account* account; 
+	//金额
+	double amount;
+	// 余额
+	double balance;
+	//描述
+	std::string desc;
+public:
+	//构造函数
+	AccountRecord(const Date& date, const Account* account, double amount, double balance, const std::string& desc);
+	//输出当前记录
+	void show() const;
+};
+
+
+typedef std::multimap<Date, AccountRecord>RecordMap;
+//账户类
 class Account
 {
 public:
 	std::string id; //账户
 	double balance;  //余额
 	static double total;  //所有账户的总金额
+	static RecordMap recordMap;  //账目记录
 protected:
 	//提供派生类调用的构造函数，id为账户
 	Account(const Date& date, const std::string& id);
@@ -31,10 +60,28 @@ public:
 	{
 		return total;
 	}
+	//存入现金，date为日期，amount为金额，desc为款项说明
+	virtual void deposit(const Date& date, double amount, const std::string& desc) = 0;
+	//取出现金，date为日期，amount为金额，desc为款项说明
+	virtual void withdraw(const Date& date, double amount, const std::string& desc) = 0;
+	//结算（计算利息、年费等），每月结算一次，date为结算日期
+	virtual void settle(const Date& date) = 0;
 	//显示账户信息
-	void show() const;
+
+	//显示账户信息
+	//void show() const;
+	virtual void show(std::ostream& out) const;
+	//查询指定时间内的账目记录
+	static void query(const Date& begin, const Date& end);
+
+	
 };
 
+inline std::ostream& operator<<(std::ostream& out, const Account& account)
+{
+	account.show(out);
+	return out;
+}
 
 class SavingsAccount : public Account  //存储账户类
 {
@@ -93,5 +140,6 @@ public:  //构造函数
 	void withdraw(const Date& date, double amount, const std::string& desc);
 	void settle(const Date& date);//结算利息和年费，每月1号调用一次该函数
 	void show() const;
+	virtual void show(std::ostream& out) const;
 };
 #endif //_ACCOUNT_H_

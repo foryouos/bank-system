@@ -37,3 +37,24 @@ void Date::show() const
 {
 	cout << getYear() << "-" << getMonth() << "-" << getDay();
 }
+//Date Date::read()
+//{
+//	int year, month, day;
+//	char c1, c2;
+//	cout << "分别输入年份，月份，日期" << endl;
+//	cin >> year >> c1 >> month >> c2 >> day;
+//	return Date(year, month, day);
+//}
+istream& operator>>(istream& in, Date& date)
+{
+	int year, month, day;
+	char c1, c2;
+	in >> year >> c1 >> month >> c2 >> day;
+	date = Date(year, month, day);
+	return in;
+}
+ostream& operator << (ostream& out, const Date& date)
+{
+	out << date.getYear() << "-" << date.getMonth() << "-" << date.getDay();
+	return out;
+}

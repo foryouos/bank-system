@@ -2,6 +2,7 @@
 /*日期类头文件*/
 #ifndef _DATE_H_
 #define _DATE_H_
+#include <iostream>
 class Date   //日期类
 {
 private:
@@ -10,7 +11,9 @@ private:
 	int day;  //日
 	int totalDays; //该日期是从公元元年1月1日开始的第几天
 public:
-	Date(int year, int month, int day); //用年，月，日构造日期
+	Date(int year=1, int month=1, int day=1); //用年，月，日构造日期
+	//专门从cin读入一个日期，赋值查询历史账目功能
+	//static Date read();
 	int getYear() const
 	{
 		return year;
@@ -33,9 +36,18 @@ public:
 	{
 		return totalDays - date.totalDays;
 	}
+	int operator-(const Date& date) const
+	{
+		return totalDays - date.totalDays;
+	}
+	bool operator<(const Date& date) const
+	{
+		return totalDays < date.totalDays;
+	}
 };
 
-
+std::istream& operator >>(std::istream& in, Date& date);
+std::ostream& operator<<(std::ostream& out, const Date& date);
 
 
 #endif // !_DATE_H_
