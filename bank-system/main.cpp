@@ -148,7 +148,7 @@ int main(void)
 	}
 
 	ofstream fileOut(FILE_NAME, ios_base::app);	//以追加模式
-	cout << "(a)add account (d)deposit (w)withdraw (s)show (c)change day (n)next month (q)query (e)exit" << endl;
+	cout << "(a)add account \n(d)deposit \n(w)withdraw \n(s)show \n(c)change day \n(n)next month \n(q)query \n(e)exit" << endl;
 	while (!controller.isEnd())
 	{	//从标准输入读入命令并执行，直到退出
 		cout << controller.getDate() << "\tTotal: " << Account::getTotal() << "\tcommand> ";

@@ -1,5 +1,5 @@
 #pragma once
-/*日期类头文件*/
+/*日期类头文件,对日期类文件进行处理*/
 #ifndef _DATE_H_
 #define _DATE_H_
 #include <iostream>
