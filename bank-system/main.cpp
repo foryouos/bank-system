@@ -12,7 +12,7 @@ environment：Visual studio 2022
 #include <string>
 
 using namespace std;
-
+//释放空间结构体，用于析构函数
 struct deleter
 {
 	template<class T>void operator() (T* p)
@@ -29,15 +29,19 @@ private:
 	vector<Account*>accounts; //账户列表
 	bool end;  //用户是够输入了退出命令
 public:
+	//存储用户数据，参数:Date时间
 	Controller(const Date& date) :date(date), end(false)
 	{
 
 	}
+	//析构函数
 	~Controller();
+	//返回当前的时间
 	const Date& getDate() const
 	{
 		return date;
 	}
+	//bool值，返回是否结束
 	bool isEnd() const
 	{
 		return end;
@@ -45,12 +49,26 @@ public:
 	//执行一条命令，返回该命令是否改变了当前状态(即是否需要保存该命令)
 	bool runCommand(const string& cmdLine);
 };
+//释放从账户开始到结束的所有内存
 Controller::~Controller()
 {
+	//for_each遍历:开始，结束，执行
+	//按照顺序应用给定的函数对象f到接引到范围[first,last]中每个迭代器的结果
 	for_each(accounts.begin(), accounts.end(), deleter());
 }
 bool Controller::runCommand(const string& cmdLine)
 {
+	/*
+	* 指令内容
+	* a s S3755217 0.015
+	* a s 02342342 0.015
+	* a c C5392394 10000 0.0005 50
+	* c 5
+	
+	*/
+	//读取是有顺序要求的，根据指针向后，异常赋值
+	//第一个赋值给cmd判断进入那个case开面
+	//后面根据不同case依次赋值
 	istringstream str(cmdLine);
 	char cmd, type;
 	int index, day;
@@ -122,13 +140,16 @@ bool Controller::runCommand(const string& cmdLine)
 
 int main(void)
 {
-	Date date(2008, 11, 1); //起始日期
+	Date date(2008,11,1); //起始日期
+	cout << "输出化本地化数据库数据" << endl;
+	//	初始化命令
 	Controller controller(date);
 	string cmdLine;
+	//打开文件名称
 	const char* FILE_NAME = "commands.txt";
 	ifstream fileIn(FILE_NAME); //以读模式打开文件
 
-	if (fileIn)
+	if (fileIn) //直到执行到没有指令
 	{	//如果正常打开，就执行文件中的每一条命令
 		while (getline(fileIn, cmdLine))
 		{
@@ -146,17 +167,34 @@ int main(void)
 			
 		fileIn.close();	//关闭文件
 	}
+	//初始化指令结束
 
+	//追加模式写入
 	ofstream fileOut(FILE_NAME, ios_base::app);	//以追加模式
-	cout << "(a)add account \n(d)deposit \n(w)withdraw \n(s)show \n(c)change day \n(n)next month \n(q)query \n(e)exit" << endl;
+	//选择框
+	cout << "\n\n\t\t***由于银行信息系统使用命令行存储数据形式，请严格按照输入格式进行输入:***" << endl;
+	cout << "\t\t\t\t******命令选项*******"
+		<<"\n\t\t\t\t\t(a)add account: a s S3755217 0.015      //a代表添加用户，s代表储蓄卡，c代表信用卡，S3755217为账户id，0.015为利率 "
+		<<"\n\t\t\t\t\t(d)deposit    ：d 0 5000 salary          //d代表存钱，0代表第0个账户，5000代表金额，salary为存储说明"
+		<< "\n\t\t\t\t\t(w)withdraw ： w 2 2000 buy a cell     //w为取钱，2代表第二个账户，2000金额，buy a cell说明"
+		<<"\n\t\t\t\t\t(s)show      ： s                        //查看账户"
+		<< "\n\t\t\t\t\t(c)change day ：c 15                   //c为改变日期，15为日 "
+		<< "\n\t\t\t\t\t(n)next month ：n                       //进入下一个月"
+		<<"\n\t\t\t\t\t(q)query      ：q 2022-11-01 2022-12-01   //遍历从11月1号到12月1号的账目数据"
+		<<"\n\t\t\t\t\t(e)exit        ：e                       //退出" 
+		<< endl;
 	while (!controller.isEnd())
 	{	//从标准输入读入命令并执行，直到退出
-		cout << controller.getDate() << "\tTotal: " << Account::getTotal() << "\tcommand> ";
+		cout << controller.getDate() << "\tTotal: " << Account::getTotal() << "\t\t\t\t\ncommand> ";
+		cout << "命令输入规范：" << endl;
 		string cmdLine;
+		//读入命令，和文件存储格式相同
 		getline(cin, cmdLine);
 		try
 		{
+			//执行命令
 			if (controller.runCommand(cmdLine))
+				//并记录文件内容
 				fileOut << cmdLine << endl;	//将命令写入文件
 		}
 		catch (AccountException& e)
