@@ -140,7 +140,7 @@ bool Controller::runCommand(const string& cmdLine)
 
 int main(void)
 {
-	Date date(2008,11,1); //起始日期
+	Date date(2022,11,1); //起始日期
 	cout << "输出化本地化数据库数据" << endl;
 	//	初始化命令
 	Controller controller(date);
