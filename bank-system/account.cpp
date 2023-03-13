@@ -61,10 +61,10 @@ void Account::show(ostream &out) const
 {
 	cout << "#" << id << "\tBalance:" << balance;
 }
-void Account::error(const string& msg) const
-{
-	cout << "Erroe(#" << id << "):" << msg << endl;
-}
+//void Account::error(const string& msg) const
+//{
+//	cout << "Erroe(#" << id << "):" << msg << endl;
+//}
 
 //SavingsAccount类的实现
 SavingsAccount::SavingsAccount(const Date& date, const string& id, double rate)  //时间，账户，利率
@@ -136,4 +136,11 @@ void CreditAccount::show(ostream& out) const
 {
 	Account::show(out);
 	cout << "\tAvailable credit:" << getAvailableCredit();
+}
+
+
+//异常
+void Account::error(const string& msg) const
+{
+	throw AccountException(this, msg);
 }

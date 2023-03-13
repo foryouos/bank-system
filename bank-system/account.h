@@ -7,6 +7,7 @@
 #include <string>
 #include <istream>
 #include <map>
+#include <stdexcept>
 //前置声明
 class Account;
 //账目记录
@@ -142,4 +143,23 @@ public:  //构造函数
 	void show() const;
 	virtual void show(std::ostream& out) const;
 };
+
+class AccountException :public std::runtime_error
+{
+private:
+	const Account* account;
+public:
+	AccountException(const Account* account, const std::string& msg)
+		:runtime_error(msg), account(account)
+	{
+
+	}
+	const Account* getAccount() const
+	{
+		return account;
+	}
+};
+
+
+
 #endif //_ACCOUNT_H_

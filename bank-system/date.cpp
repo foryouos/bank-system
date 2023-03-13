@@ -2,6 +2,7 @@
 #include "date.h"
 #include <iostream>
 #include <cstdlib>
+#include <stdexcept>  //错误
 using namespace std;
 namespace  //使用namespace使下面的定义只能在当前文件中有效
 {
@@ -12,10 +13,7 @@ Date::Date(int year, int month, int day) :year(year), month(month), day(day)
 {
 	if (day <= 0 || day > getMaxDay())
 	{
-		cout << "Invalid date:";
-		show();
-		cout << endl;
-		exit(1);
+		throw runtime_error("Invalid date"); //Date发生异常，直接使用标准程序库构造异常抛出
 	}
 	int years = year - 1;
 	totalDays = years * 365 + years / 4 - years / 100 + years / 400 + DAYS_BEFORE_MONTH[month - 1] + day;
@@ -49,7 +47,12 @@ istream& operator>>(istream& in, Date& date)
 {
 	int year, month, day;
 	char c1, c2;
+	cout << "类似输入格式为:2019-01-01" << endl;
 	in >> year >> c1 >> month >> c2 >> day;
+	if (c1 != '-' || c2 != '-')
+		throw runtime_error("Bad time format");
+
+
 	date = Date(year, month, day);
 	return in;
 }
