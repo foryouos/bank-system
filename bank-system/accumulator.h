@@ -36,6 +36,4 @@ public:
 };
 
 
-
-
 #endif // !_ACCUMULATOR_H_

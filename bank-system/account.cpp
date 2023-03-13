@@ -1,5 +1,5 @@
 /*
-project :类实现文件
+project :Account账户类实现文件cpp
 */
 #include "account.h"
 #include <iostream>
@@ -7,12 +7,13 @@ project :类实现文件
 #include <utility>
 using namespace std;
 using namespace std::rel_ops;
-//AccountRecord类的实现
+//AccountRecord类的实现：参数日期Date,账户Account类，金额，余额，描述信息
 AccountRecord::AccountRecord(const Date& date, const Account* account, double amount, double balance, const std::string& desc)
 	:date(date), account(account), amount(amount), balance(balance), desc(desc)
 {
 
 }
+// 展现出账户记录类的账户时间，Id，存款金额，余额（算上信用卡)，描述信息
 void AccountRecord::show() const
 {
 	//date.show();
@@ -22,14 +23,19 @@ void AccountRecord::show() const
 
 
 
-//存款总金额全局变量
+//存款总金额全局变量(所有账户）
 double Account::total = 0;
+// Account类中的账户记录
 RecordMap Account::recordMap;
+//账户记录查询实现，参数:开始Date,结束Date
 void Account::query(const Date& begin, const Date& end)
 {
+	//从开始到结尾遍历输出
 	if (begin <= end)
 	{
+		//lower_bound返回指向首个不小于给定键的元素的迭代器
 		RecordMap::iterator iter1 = recordMap.lower_bound(begin);
+		//upper_bound返回指向首个大于给定键的元素的迭代器
 		RecordMap::iterator iter2 = recordMap.upper_bound(end);
 		for (RecordMap::iterator iter = iter1; iter != iter2; ++iter)
 		{
@@ -50,7 +56,7 @@ Account::Account(const Date& date, const string& id)
 }
 void Account::record(const Date& date, double amount, const string& desc)
 {
-	
+
 	amount = floor(amount * 100 + 0.5) / 100;  //保留小数点后两位，
 	balance += amount;
 	total += amount;
